@@ -11,7 +11,7 @@ class Coin{
     if(this.s){
       image(coin, this.x, this.y, 33, 20)
     }
-    if(Math.abs(this.x - width/2 + x) < 20 && Math.abs(this.y - y) < 40){
+    if(Math.abs(this.x + width/2 + x) < 20 && Math.abs(this.y - y) < 40){
       this.s = false
       score += 1
     }

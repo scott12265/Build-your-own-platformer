@@ -24,7 +24,7 @@ let count = 0
 let idleCount = 0
 let coins = []
 let coin
-
+let back
 function preload(){
   for(i = 0; i < 6; i++){
     runsR.push(loadImage(`runRight/runR${i}.png`))
@@ -35,19 +35,17 @@ function preload(){
   for(i = 0; i < 4; i++){
     idleNoSword.push(loadImage(`idleNoSword/idle${i}.png`))
   }
-  coin = loadImage('coin.png')
 }
 
 function setup(){
   imageMode(CENTER)
-  accel = 20 * 0.05
+  accel = 20 * 0.04
   rectMode(CENTER)
   createCanvas(600, 400)
   grounds.push(new Boundary(width/2, height + 200, 100000, 10))
 }
 
 function draw(){
-  background(50)
   count += abs(speed/20)
   idleCount += 0.07
   
@@ -66,6 +64,7 @@ function draw(){
   }
   textAlign(CENTER)
   background('#6998d1')
+  text(x, 20, 80)
   textSize(20)
   fill('black')
   text('Score:' + score, 40, 100)
@@ -134,7 +133,7 @@ function draw(){
   y += vel
   
   if (y > floor - mass/2) {
-    vel *= 0.3;
+    vel *= 0.6;
     y = floor - mass/2
   }
   
@@ -182,8 +181,8 @@ function draw(){
 }
 
 function keyPressed(){
-  if(keyCode === 32){
-    vel -= 15
+  if(keyCode === 32 && y >= floor - 10){
+    vel -= 13
   }
   if(keyCode === 13){
     y = 80
@@ -229,11 +228,9 @@ function mouseReleased(){
     let yw = abs(tempY1 - tempY2)
 
     if(tempX1 < tempX2 && tempY1 < tempY2){
-      console.log('bottom right')
       grounds.push(new Boundary(tempX1 + xw/2, tempY2 - yw/2, xw, yw))
     }
     if(tempX1 < tempX2 && tempY1 > tempY2){
-      console.log('top right')
       grounds.push(new Boundary(tempX1 + xw/2, tempY2 + yw/2, xw, yw))
     }
 
