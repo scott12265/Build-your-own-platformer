@@ -8,6 +8,8 @@ class Boundary{
   show(){
     push()
     translate(-x, 0)
+    fill('#a16d43')
+    noStroke()
     rect(this.x, this.y, this.w + 4, this.h + 4)
     
     if(this.y > y && Math.abs((width/2) + x - this.x) < (this.w/2) + mass/2){
@@ -19,7 +21,6 @@ class Boundary{
           x += 1
           left = false
           speed = 0
-          
         }
       }
       if((width/2) + x < this.x + (this.w/2) + mass/2){

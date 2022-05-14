@@ -25,6 +25,10 @@ let idleCount = 0
 let coins = []
 let coin
 let back
+let mapX = 0
+let t = 0
+let xStop = 300
+
 function preload(){
   for(i = 0; i < 6; i++){
     runsR.push(loadImage(`runRight/runR${i}.png`))
@@ -35,17 +39,25 @@ function preload(){
   for(i = 0; i < 4; i++){
     idleNoSword.push(loadImage(`idleNoSword/idle${i}.png`))
   }
+  coin = loadImage('coin.png')
 }
 
 function setup(){
   imageMode(CENTER)
   accel = 20 * 0.04
   rectMode(CENTER)
-  createCanvas(600, 400)
+  createCanvas(900, 400)
   grounds.push(new Boundary(width/2, height + 200, 100000, 10))
 }
 
 function draw(){
+  if(Math.round(speed) != 0 && Math.round(speed) < 0 && x <= xStop){
+    xStop = x
+    t += 0.004
+    mapX += 1
+    grounds.push(new Boundary(x, height, 1, map(noise(t),0,1,0, width/2 + 100)))
+  }
+  
   count += abs(speed/20)
   idleCount += 0.07
   
@@ -64,7 +76,6 @@ function draw(){
   }
   textAlign(CENTER)
   background('#6998d1')
-  text(x, 20, 80)
   textSize(20)
   fill('black')
   text('Score:' + score, 40, 100)
@@ -118,7 +129,7 @@ function draw(){
   text('Enemy', 185, 35)
   pop()
   
-    if(mouseIsPressed && mouseY > 69 && buttonState === 'ground'){
+  if(mouseIsPressed && mouseY > 69 && buttonState === 'ground'){
     line(tempX1-x, tempY1, mouseX, tempY1)
     line(tempX1-x, tempY1, tempX1-x, mouseY)
     line(mouseX, tempY1, mouseX, mouseY)
@@ -126,7 +137,9 @@ function draw(){
   }
 
   for(i = 0;i < grounds.length; i++){
-    grounds[i].show()
+    if(grounds[i].x > x - 10 && grounds[i].x < x + width + 10){
+      grounds[i].show()
+    }
   }
   
   vel += accel;
@@ -188,11 +201,15 @@ function keyPressed(){
     y = 80
     vel = 0
   }
+  if(keyCode === 8 && buttonState === 'ground'){
+    grounds.pop()
+  }
+  if(keyCode === 8 && buttonState === 'coin'){
+    coins.pop()
+  }
 }
 
-function mousePressed(){
-  console.log(mouseX, mouseY)
-}
+
 
 function mousePressed(){
   console.log(mouseX, mouseY)
@@ -205,19 +222,7 @@ function mousePressed(){
     tempX1 = mouseX + x
     tempY1 = mouseY
   }
-}
-
-function mousePressed(){
   console.log(mouseX, mouseY)
-  if(mouseY > 69 && buttonState === 'ground'){
-    tempX1 = mouseX + x
-    tempY1 = mouseY
-  }else if(mouseY > 69 && buttonState === 'coin'){
-    coins.push(new Coin(mouseX + x, mouseY))
-  }else if(mouseY > 69 && buttonState === 'enemy'){
-    tempX1 = mouseX + x
-    tempY1 = mouseY
-  }
 }
 
 function mouseReleased(){
